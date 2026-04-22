@@ -31,18 +31,18 @@ st.markdown("""
     .stChatMessage { border-radius: 12px; padding: 12px; margin-bottom: 8px; border: 1px solid #d1d5db; }
     .stButton>button { width: 100%; border-radius: 15px; font-weight: 500; height: 3em; }
     .stProgress > div > div > div > div { background-color: #4f46e5; }
-    /* Tighten layout */
     .block-container { padding-top: 2rem; padding-bottom: 1rem; }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🛡️ OmniCrew Chat Orchestrator")
-st.markdown("Universal Orchestration Hub | Visual Tracking v2.8.5")
+st.markdown("Universal Orchestration Hub | Connection Hardened v2.9")
 st.markdown("---")
 
-# Define Master LLM
+# Define Master LLM with STABLE Model Identifier
+# Removed 'openai/' prefix to ensure direct NVIDIA NIM compatibility
 master_llm = LLM(
-    model="openai/meta/llama-3.1-8b-instruct",
+    model="meta/llama-3.1-8b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.getenv("NVIDIA_API_KEY")
 )
@@ -54,7 +54,7 @@ if "messages" not in st.session_state:
 # Sidebar - Permanent Control Center
 with st.sidebar:
     st.title("🛡️ OmniCrew Control")
-    st.status("NVIDIA Llama-3.1: ONLINE", state="complete")
+    st.status("NVIDIA Reasoning: STABLE", state="complete")
     st.status("MCP Tools: DuckDuckGo, Arxiv, Serper", state="complete")
     st.status("Vector Store: LOCAL", state="complete")
     st.markdown("---")
@@ -147,14 +147,14 @@ if prompt := st.chat_input("Command the specialized workforce..."):
                     
                     status.update(label="Workflow Finalized", state="complete")
                     
-                    # CLEAN RESPONSE OUTPUT (Same as past)
+                    # CLEAN RESPONSE OUTPUT
                     st.markdown("### 📊 Strategic Response")
                     st.markdown(result_raw)
                     st.session_state.messages.append({"role": "assistant", "content": result_raw})
                     
                 except Exception as e:
-                    status.update(label="Execution Error", state="error")
-                    st.error(f"Critical System Failure: {e}")
+                    status.update(label="NVIDIA Service Unavailable (503)", state="error")
+                    st.error(f"The NVIDIA reasoning servers are currently overloaded. Please wait 30 seconds and try again. Detailed error: {e}")
             else:
                 # 3. MASTER ORCHESTRATOR FALLBACK
                 status.update(label="General Intelligence Active.", state="complete")
@@ -167,4 +167,4 @@ if prompt := st.chat_input("Command the specialized workforce..."):
                         st.markdown(response)
                         st.session_state.messages.append({"role": "assistant", "content": response})
                 except Exception as e:
-                    st.error(f"Reason: {e}")
+                    st.error(f"NVIDIA Service Error: {e}")

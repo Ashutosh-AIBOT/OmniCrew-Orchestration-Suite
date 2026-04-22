@@ -10,7 +10,7 @@ load_dotenv()
 
 # Define the High-Speed NVIDIA LLM
 nvidia_llm = LLM(
-    model="openai/meta/llama-3.1-8b-instruct",
+    model="meta/llama-3.1-8b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.getenv("NVIDIA_API_KEY")
 )
