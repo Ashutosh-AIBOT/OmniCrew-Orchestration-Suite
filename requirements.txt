@@ -1,4 +1,4 @@
-crewai==0.100.1
+crewai
 crewai-tools
 streamlit
 fastapi
