@@ -1,0 +1,13 @@
+news_report_task:
+  description: >
+    Conduct a deep-dive investigation into the latest developments for {topic}. 
+    Focus on competitive shifts, technological breakthroughs, and regulatory changes. 
+    Utilize the search tool to verify all facts and cross-reference multiple high-authority sources.
+  expected_output: >
+    A comprehensive Market Intelligence Briefing including:
+    1. Executive Summary
+    2. Key Strategic Developments
+    3. Competitor Impact Analysis
+    4. Future Trend Projections
+    Format the output in professional Markdown.
+  agent: news_reporter

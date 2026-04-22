@@ -1,0 +1,15 @@
+summarization_task:
+  description: >
+    Execute a deep context retrieval for the query: {query}. 
+    Analyze the available PDF knowledge sources, identify critical patterns, 
+    and synthesize a high-fidelity summary. 
+    Constraint: If the information is not present in the sources, explicitly state 
+    'Insufficient data in provided knowledge base'—do not speculate.
+  expected_output: >
+    A Technical Synthesis Report including:
+    - Evidence-based findings
+    - Citations from internal documents
+    - Knowledge Gap Analysis (if any)
+    Format in structured Markdown.
+  agent: research_summarization
+  markdown: true

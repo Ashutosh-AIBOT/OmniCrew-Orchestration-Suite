@@ -1,0 +1,12 @@
+blog_writing_task:
+  description: >
+    Develop a high-impact Strategic Whitepaper on the topic: {topic}. 
+    This involves three distinct phases:
+    1. Comprehensive research and data gathering.
+    2. Narrative drafting and strategic positioning.
+    3. Final editorial review and structural polish.
+    Ensure the tone is 'Authoritative' and the focus is on 'Future-Forward Trends'.
+  expected_output: >
+    A multi-section Strategic Whitepaper in Markdown including an Executive Summary, 
+    Detailed Analysis, and Actionable Recommendations.
+  agent: blog_writing_agent

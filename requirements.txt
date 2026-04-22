@@ -1,0 +1,15 @@
+crewai==0.100.1
+crewai-tools
+streamlit
+fastapi
+uvicorn
+python-dotenv
+serper-dev
+pypdf
+sentence-transformers
+litellm
+pydantic
+langchain-community
+langchain-nvidia-ai-endpoints
+duckduckgo-search
+arxiv

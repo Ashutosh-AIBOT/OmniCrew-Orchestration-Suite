@@ -1,0 +1,17 @@
+report_generation_task:
+  description: >
+    Review the raw business report data and generate a standardized, professional 
+    Audit Report. Focus on clarity, logical flow, and structural integrity. 
+    Ensure all sections (Financials, Operations, Strategy) are clearly defined.
+  expected_output: >
+    A multi-page professional Audit Report in Markdown format.
+  agent: report_generator
+
+report_summarization_task:
+  description: >
+    Take the generated Audit Report and create a high-impact Executive Summary. 
+    Focus on 'Actionable Insights' and 'Key Performance Indicators (KPIs)'. 
+    The summary must be concise and strategic.
+  expected_output: >
+    A one-page Executive Summary highlighting the top 5 strategic findings.
+  agent: report_summarizer

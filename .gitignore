@@ -1,0 +1,29 @@
+# Environment Variables (CRITICAL: NEVER COMMIT THIS)
+.env
+
+# Python Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints
+.pytest_cache/
+.uv/
+
+# Virtual Environments
+venv/
+env/
+.env/
+agent/
+
+# Streamlit
+.streamlit/
+
+# Knowledge / Private Data
+# We ignore the contents but keep the folder
+knowledge/*
+!knowledge/.gitkeep
+
+# Logs and temporary files
+*.log
+*.tmp
+.DS_Store
