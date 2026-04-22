@@ -16,10 +16,15 @@ nvidia_llm = LLM(
     api_key=os.getenv("NVIDIA_API_KEY")
 )
 
+# Robust Path Calculation for Knowledge Source
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Navigate up from Private_Knowledge_RAG/src/knowledge_crew/ to the root
+root_dir = os.path.abspath(os.path.join(current_dir, "../../../"))
+pdf_path = os.path.join(root_dir, "knowledge", "survey_on_icl.pdf")
+
 # define the pdf knowledge source with LOCAL EMBEDDINGS
-# This prevents the 401 OpenAI error during document "upsert"
 research_paper_source = PDFKnowledgeSource(
-    file_paths=["survey_on_icl.pdf"],
+    file_paths=[pdf_path],
     chunk_size=1500,
     chunk_overlap=250,
     embedder={
