@@ -24,26 +24,27 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Professional UI Styling
+# RESTORED CLASSIC UI STYLING (Muted & Sleek)
 st.markdown("""
     <style>
     [data-testid="collapsedControl"] { display: none; }
-    .stChatMessage { border-radius: 15px; padding: 15px; margin-bottom: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; }
-    .stButton>button { width: 100%; border-radius: 20px; font-weight: bold; }
-    .output-header { font-size: 1.2em; font-weight: bold; color: #1E293B; margin-bottom: 10px; border-bottom: 2px solid #6366F1; padding-bottom: 5px; }
+    .stChatMessage { border-radius: 12px; padding: 12px; margin-bottom: 8px; border: 1px solid #d1d5db; }
+    .stButton>button { width: 100%; border-radius: 15px; font-weight: 500; height: 3em; }
+    .stProgress > div > div > div > div { background-color: #4f46e5; }
+    /* Tighten layout */
+    .block-container { padding-top: 2rem; padding-bottom: 1rem; }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🛡️ OmniCrew Chat Orchestrator")
-st.markdown("**Universal Orchestration Hub | Elite Reasoning Suite v2.8**")
+st.markdown("Universal Orchestration Hub | Visual Tracking v2.8.5")
 st.markdown("---")
 
-# Define Master LLM with optimized reasoning parameters
+# Define Master LLM
 master_llm = LLM(
     model="openai/meta/llama-3.1-8b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
-    api_key=os.getenv("NVIDIA_API_KEY"),
-    temperature=0.7 # Balanced for strategic creativity and precision
+    api_key=os.getenv("NVIDIA_API_KEY")
 )
 
 # Initialize Chat History
@@ -132,46 +133,38 @@ if prompt := st.chat_input("Command the specialized workforce..."):
                             result = BlogGenerationCrew().crew().kickoff(inputs={'topic': prompt})
                             result_raw = result.raw
                         elif intent == "market_intel":
-                            st.write("🛠️ **Tool Log**: Engaging Market Intelligence MCP Tools...")
+                            st.write("🛠️ **Tool Log**: Engaging Market Intelligence Tools...")
                             result = NewsReportCrew().crew().kickoff(inputs={'topic': prompt})
                             result_raw = result.raw
                         elif intent == "knowledge_rag":
-                            st.write("🛠️ **Tool Log**: Synthesizing Internal PDF Vector Store...")
+                            st.write("🛠️ **Tool Log**: Synthesizing PDF Vector Store...")
                             result = KnowledgeCrew().crew().kickoff(inputs={'query': prompt})
                             result_raw = result.raw
                         elif intent == "audit_summarizer":
-                            st.write("🛠️ **Tool Log**: Running Compliance Validation Audit...")
+                            st.write("🛠️ **Tool Log**: Running Compliance Audit...")
                             result = ReportSummarizationCrew().crew().kickoff()
                             result_raw = result.raw
                     
                     status.update(label="Workflow Finalized", state="complete")
                     
-                    # ELITE OUTPUT FORMATTING
-                    output_html = f"<div class='output-header'>📊 Strategic {intent.replace('_', ' ').title()} Output</div>\n\n{result_raw}"
-                    st.markdown(output_html, unsafe_allow_html=True)
-                    st.session_state.messages.append({"role": "assistant", "content": output_html})
+                    # CLEAN RESPONSE OUTPUT (Same as past)
+                    st.markdown("### 📊 Strategic Response")
+                    st.markdown(result_raw)
+                    st.session_state.messages.append({"role": "assistant", "content": result_raw})
                     
                 except Exception as e:
                     status.update(label="Execution Error", state="error")
                     st.error(f"Critical System Failure: {e}")
             else:
-                # 3. GENERAL INTELLIGENCE FALLBACK (UPGRADED)
-                status.update(label="Confidence < 40%. Activating Master Orchestrator Persona.", state="complete")
+                # 3. MASTER ORCHESTRATOR FALLBACK
+                status.update(label="General Intelligence Active.", state="complete")
                 try:
-                    with st.spinner("Generating Elite Synthesis..."):
-                        orchestrator_prompt = f"""
-                        You are the OmniCrew Master Orchestrator. 
-                        Respond to the following request with extreme professionalism, 
-                        clarity, and strategic insight. If the request is general, 
-                        provide a high-value synthesis. 
-                        
-                        User Request: {prompt}
-                        """
+                    with st.spinner("Generating Professional Synthesis..."):
+                        orchestrator_prompt = f"Respond professionally as an AI Orchestrator to: {prompt}"
                         response = master_llm.call([{"role": "user", "content": orchestrator_prompt}])
                         
-                        # ELITE OUTPUT FORMATTING
-                        output_html = f"<div class='output-header'>🧠 Master Orchestrator Synthesis</div>\n\n{response}"
-                        st.markdown(output_html, unsafe_allow_html=True)
-                        st.session_state.messages.append({"role": "assistant", "content": output_html})
+                        st.markdown("### 🧠 Orchestrator Synthesis")
+                        st.markdown(response)
+                        st.session_state.messages.append({"role": "assistant", "content": response})
                 except Exception as e:
                     st.error(f"Reason: {e}")
