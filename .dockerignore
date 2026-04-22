@@ -1,0 +1,13 @@
+.git
+.github
+__pycache__
+*.pyc
+.env
+.venv
+venv
+env
+.streamlit/config.toml
+.streamlit/credentials.toml
+*.md
+LICENSE
+.python-version
