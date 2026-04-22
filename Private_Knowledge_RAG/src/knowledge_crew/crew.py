@@ -16,11 +16,15 @@ nvidia_llm = LLM(
     api_key=os.getenv("NVIDIA_API_KEY")
 )
 
-# Robust Path Calculation for Knowledge Source
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Navigate up from Private_Knowledge_RAG/src/knowledge_crew/ to the root
-root_dir = os.path.abspath(os.path.join(current_dir, "../../../"))
+# Robust Path Calculation for Knowledge Source and Configs
+base_path = os.path.dirname(os.path.abspath(__file__))
+# Navigate up from Private_Knowledge_RAG/src/knowledge_crew/ to the root for PDF
+root_dir = os.path.abspath(os.path.join(base_path, "../../../"))
 pdf_path = os.path.join(root_dir, "knowledge", "survey_on_icl.pdf")
+
+# Absolute paths for YAML configs
+agents_config_path = os.path.join(base_path, "config/agents.yaml")
+tasks_config_path = os.path.join(base_path, "config/tasks.yaml")
 
 # define the pdf knowledge source with LOCAL EMBEDDINGS
 research_paper_source = PDFKnowledgeSource(
@@ -42,9 +46,9 @@ class KnowledgeCrew():
     agents: List[BaseAgent]
     tasks: List[Task]
 
-    # define the path for config files
-    agents_config = "config/agents.yaml"
-    tasks_config = "config/tasks.yaml"
+    # define the path for config files using ABSOLUTE PATHS
+    agents_config = agents_config_path
+    tasks_config = tasks_config_path
     
     # define our agent
     @agent

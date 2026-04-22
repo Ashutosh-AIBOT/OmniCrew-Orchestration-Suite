@@ -10,12 +10,16 @@ from crewai_tools import SerperDevTool
 load_dotenv()
 
 # Define the High-Speed NVIDIA LLM
-# We use 'openai/' prefix with base_url to use NVIDIA's OpenAI-compatible API
 nvidia_llm = LLM(
     model="openai/meta/llama-3.1-8b-instruct",
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.getenv("NVIDIA_API_KEY")
 )
+
+# Define absolute paths for config files
+base_path = os.path.dirname(os.path.abspath(__file__))
+agents_config_path = os.path.join(base_path, "config/agents.yaml")
+tasks_config_path = os.path.join(base_path, "config/tasks.yaml")
 
 # define the web search tool
 web_search_tool = SerperDevTool()
@@ -27,9 +31,9 @@ class BlogGenerationCrew():
     agents: List[BaseAgent]
     tasks: List[Task]
     
-    # set the path of config files
-    agents_config = "config/agents.yaml"
-    tasks_config = "config/tasks.yaml"
+    # set the path of config files using ABSOLUTE PATHS
+    agents_config = agents_config_path
+    tasks_config = tasks_config_path
     
     # define the agents inside the crew
     @agent
@@ -72,8 +76,7 @@ class BlogGenerationCrew():
     @task
     def blog_writing_task(self) -> Task:
         return Task(
-            config=self.tasks_config["blog_writing_task"],
-            output_file="blog.md"
+            config=self.tasks_config["blog_writing_task"]
         )
         
     @crew
@@ -83,9 +86,8 @@ class BlogGenerationCrew():
                     self.blog_writing_agent(),
                     self.blog_review_agent()],
             tasks=[self.blog_writing_task()],
-            process=Process.hierarchical,
+            process=Process.sequential, # High-Speed Pipeline
             verbose=True,
-            manager_agent=self.team_leader(),
-            memory=False, # DISABLED to prevent OpenAI embedding calls
-            planning=False # DISABLED to prevent OpenAI planning calls
+            memory=False, 
+            planning=False 
         )

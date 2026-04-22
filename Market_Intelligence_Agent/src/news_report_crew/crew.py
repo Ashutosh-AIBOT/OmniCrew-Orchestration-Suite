@@ -16,6 +16,11 @@ nvidia_llm = LLM(
     api_key=os.getenv("NVIDIA_API_KEY")
 )
 
+# Define absolute paths for config files
+base_path = os.path.dirname(os.path.abspath(__file__))
+agents_config_path = os.path.join(base_path, "config/agents.yaml")
+tasks_config_path = os.path.join(base_path, "config/tasks.yaml")
+
 # define the search tool
 search_tool = SerperDevTool()
 
@@ -26,9 +31,9 @@ class NewsReportCrew():
     agents: List[BaseAgent]
     tasks: List[Task]
 
-    # set the paths for config files
-    agents_config = "config/agents.yaml"
-    tasks_config = "config/tasks.yaml"
+    # set the paths for config files using ABSOLUTE PATHS
+    agents_config = agents_config_path
+    tasks_config = tasks_config_path
     
     # define the agent
     @agent
