@@ -1,12 +1,23 @@
+research_task:
+  description: >
+    Conduct in-depth research and data gathering on the topic: {topic}. 
+    Focus on finding current trends, statistics, and industry benchmarks.
+  expected_output: >
+    A comprehensive research brief containing key findings, data points, and relevant links.
+  agent: research_agent
+
 blog_writing_task:
   description: >
     Develop a high-impact Strategic Whitepaper on the topic: {topic}. 
-    This involves three distinct phases:
-    1. Comprehensive research and data gathering.
-    2. Narrative drafting and strategic positioning.
-    3. Final editorial review and structural polish.
-    Ensure the tone is 'Authoritative' and the focus is on 'Future-Forward Trends'.
+    Utilize the research brief provided to create a narrative that is authoritative and future-forward.
   expected_output: >
-    A multi-section Strategic Whitepaper in Markdown including an Executive Summary, 
-    Detailed Analysis, and Actionable Recommendations.
+    A multi-section Strategic Whitepaper in Markdown including an Executive Summary and Detailed Analysis.
   agent: blog_writing_agent
+
+review_task:
+  description: >
+    Perform a final editorial review and structural polish of the whitepaper. 
+    Ensure the tone is professional, the flow is logical, and actionable recommendations are added.
+  expected_output: >
+    A finalized, polished Strategic Whitepaper in Markdown ready for executive presentation.
+  agent: blog_review_agent

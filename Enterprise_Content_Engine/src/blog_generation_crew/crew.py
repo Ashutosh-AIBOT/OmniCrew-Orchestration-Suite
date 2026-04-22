@@ -37,15 +37,6 @@ class BlogGenerationCrew():
     
     # define the agents inside the crew
     @agent
-    def team_leader(self) -> Agent:
-        return Agent(
-            config=self.agents_config["team_leader"],
-            verbose=True,
-            allow_delegation=True,
-            llm=nvidia_llm
-        )
-        
-    @agent
     def research_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["research_agent"],
@@ -73,19 +64,34 @@ class BlogGenerationCrew():
             llm=nvidia_llm
         )
 
+    # Define the 3 tasks
+    @task
+    def research_task(self) -> Task:
+        return Task(
+            config=self.tasks_config["research_task"]
+        )
+
     @task
     def blog_writing_task(self) -> Task:
         return Task(
             config=self.tasks_config["blog_writing_task"]
         )
         
+    @task
+    def review_task(self) -> Task:
+        return Task(
+            config=self.tasks_config["review_task"]
+        )
+
     @crew
     def crew(self) -> Crew:
         return Crew(
             agents=[self.research_agent(),
                     self.blog_writing_agent(),
                     self.blog_review_agent()],
-            tasks=[self.blog_writing_task()],
+            tasks=[self.research_task(),
+                   self.blog_writing_task(),
+                   self.review_task()],
             process=Process.sequential, # High-Speed Pipeline
             verbose=True,
             memory=False, 
