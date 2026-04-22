@@ -16,19 +16,19 @@ nvidia_llm = LLM(
     api_key=os.getenv("NVIDIA_API_KEY")
 )
 
-# Robust Path Calculation for Knowledge Source and Configs
+# Define absolute paths for YAML configs (these remain absolute for reliability)
 base_path = os.path.dirname(os.path.abspath(__file__))
-# Navigate up from Private_Knowledge_RAG/src/knowledge_crew/ to the root for PDF
-root_dir = os.path.abspath(os.path.join(base_path, "../../../"))
-pdf_path = os.path.join(root_dir, "knowledge", "survey_on_icl.pdf")
-
-# Absolute paths for YAML configs
 agents_config_path = os.path.join(base_path, "config/agents.yaml")
 tasks_config_path = os.path.join(base_path, "config/tasks.yaml")
 
+# Simplified Path for Knowledge Source
+# We use only the filename because crewai automatically prefixes it with 'knowledge/'
+# This prevents the 'knowledge/app/knowledge/...' double-pathing error in Docker.
+pdf_filename = "survey_on_icl.pdf"
+
 # define the pdf knowledge source with LOCAL EMBEDDINGS
 research_paper_source = PDFKnowledgeSource(
-    file_paths=[pdf_path],
+    file_paths=[pdf_filename],
     chunk_size=1500,
     chunk_overlap=250,
     embedder={
