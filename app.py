@@ -1,5 +1,6 @@
 import os
 import re
+import streamlit as st
 from dotenv import load_dotenv
 
 # 1. FORCE GLOBAL NVIDIA CONFIGURATION
@@ -7,7 +8,6 @@ load_dotenv()
 os.environ["OPENAI_API_BASE"] = "https://integrate.api.nvidia.com/v1"
 os.environ["OPENAI_API_KEY"] = os.getenv("NVIDIA_API_KEY")
 
-import streamlit as st
 from crewai import LLM
 
 # Import all professional crews
@@ -28,13 +28,14 @@ st.set_page_config(
 st.markdown("""
     <style>
     [data-testid="collapsedControl"] { display: none; }
-    .stChatMessage { border-radius: 15px; padding: 15px; margin-bottom: 10px; border: 1px solid #e0e0e0; }
-    .stButton>button { width: 100%; border-radius: 20px; }
+    .stChatMessage { border-radius: 15px; padding: 15px; margin-bottom: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; }
+    .stButton>button { width: 100%; border-radius: 20px; font-weight: bold; }
+    .tool-log { font-family: monospace; color: #4F46E5; font-size: 0.85em; }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🛡️ OmniCrew Chat Orchestrator")
-st.markdown("Universal Orchestration Hub | Visual Tool Tracking v2.4")
+st.markdown("**Universal Orchestration Hub | Visual Intelligence Hub v2.7**")
 st.markdown("---")
 
 # Define Master LLM
@@ -110,8 +111,8 @@ if prompt := st.chat_input("Command the specialized workforce..."):
     with st.chat_message("assistant"):
         intent, score = detect_intent_with_score(prompt)
         
-        # UI: Routing and Tool Visibility
-        with st.status(f"Strategic Routing Engine...", expanded=False) as status:
+        # 1. VISUAL ROUTING ENGINE
+        with st.status(f"Strategic Routing Engine...", expanded=True) as status:
             final_score = score
             is_detailed = any(word in prompt.lower() for word in ["detailed", "info", "explain", "research", "deep", "study"])
             if is_detailed and final_score < 100 and final_score > 0:
@@ -122,37 +123,47 @@ if prompt := st.chat_input("Command the specialized workforce..."):
             if final_score >= 40:
                 status.update(label=f"Specialist Verified: {intent.replace('_', ' ').upper()}", state="running")
                 
-                with st.status(f"Executing Specialist Workforce...", expanded=True) as workflow:
+                # 2. TOOL EXECUTION TRACKER
+                with st.container():
+                    st.write("---")
+                    st.info(f"🚀 Deploying **{intent.replace('_', ' ').title()}** Workforce...")
+                    
                     try:
                         result_raw = ""
-                        if intent == "content_engine":
-                            st.write("🛠️ **Tool Check**: Initializing Strategic Content Pipeline...")
-                            result = BlogGenerationCrew().crew().kickoff(inputs={'topic': prompt})
-                            result_raw = result.raw
-                        elif intent == "market_intel":
-                            st.write("🛠️ **Tool Check**: Engaging **DuckDuckGo** & **Serper.dev** MCP Tools...")
-                            result = NewsReportCrew().crew().kickoff(inputs={'topic': prompt})
-                            result_raw = result.raw
-                        elif intent == "knowledge_rag":
-                            st.write("🛠️ **Tool Check**: engaging **Arxiv** & **Local PDF Vector Store**...")
-                            result = KnowledgeCrew().crew().kickoff(inputs={'query': prompt})
-                            result_raw = result.raw
-                        elif intent == "audit_summarizer":
-                            st.write("🛠️ **Tool Check**: Initializing Compliance Validation Unit...")
-                            result = ReportSummarizationCrew().crew().kickoff()
-                            result_raw = result.raw
+                        with st.spinner("Agents are performing reasoning and tool-calling..."):
+                            if intent == "content_engine":
+                                st.write("🛠️ **Tool Log**: Initializing Strategic Content Pipeline...")
+                                result = BlogGenerationCrew().crew().kickoff(inputs={'topic': prompt})
+                                result_raw = result.raw
+                            elif intent == "market_intel":
+                                st.write("🛠️ **Tool Log**: Engaging **DuckDuckGo** & **Serper.dev** MCP Tools...")
+                                result = NewsReportCrew().crew().kickoff(inputs={'topic': prompt})
+                                result_raw = result.raw
+                            elif intent == "knowledge_rag":
+                                st.write("🛠️ **Tool Log**: Engaging **Arxiv** & **Local Vector Store**...")
+                                result = KnowledgeCrew().crew().kickoff(inputs={'query': prompt})
+                                result_raw = result.raw
+                            elif intent == "audit_summarizer":
+                                st.write("🛠️ **Tool Log**: Initializing Compliance Validation Unit...")
+                                result = ReportSummarizationCrew().crew().kickoff()
+                                result_raw = result.raw
                         
-                        workflow.update(label="Workflow Finalized", state="complete")
+                        status.update(label="Workflow Finalized", state="complete")
+                        
+                        # DISPLAY FINAL RESPONSE
+                        st.markdown("### 📊 Workforce Output")
                         st.markdown(result_raw)
                         st.session_state.messages.append({"role": "assistant", "content": result_raw})
+                        
                     except Exception as e:
-                        workflow.update(label="Execution Error", state="error")
-                        st.error(f"Reason: {e}")
+                        status.update(label="Execution Error", state="error")
+                        st.error(f"Critical System Failure: {e}")
             else:
-                status.update(label="Confidence < 40%. General Intelligence Assistant.", state="complete")
+                status.update(label="General Intelligence Fallback Active", state="complete")
                 try:
-                    response = master_llm.call([{"role": "user", "content": f"Respond professionally to: {prompt}"}])
-                    st.markdown(response)
-                    st.session_state.messages.append({"role": "assistant", "content": response})
+                    with st.spinner("Generating professional response..."):
+                        response = master_llm.call([{"role": "user", "content": f"Respond professionally as an AI Orchestrator to: {prompt}"}])
+                        st.markdown(response)
+                        st.session_state.messages.append({"role": "assistant", "content": response})
                 except Exception as e:
                     st.error(f"Reason: {e}")
