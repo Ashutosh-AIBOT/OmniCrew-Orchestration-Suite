@@ -27,3 +27,5 @@ knowledge/*
 *.log
 *.tmp
 .DS_Store
+hf_deploy/
+purified_deploy/
